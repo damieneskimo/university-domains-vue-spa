@@ -1,9 +1,8 @@
 <template>
-  <div class="text-lg border rounded w-1/2 mt-16 p-5 mx-auto bg-green-200">
-    <input v-if="country" 
-      v-model="keywords" 
+  <div>
+    <input v-model="keywords" 
       placeholder="Search by name or domain"
-      class="border rounded w-1/3 px-3 py-1 float-right">
+      class="border rounded w-1/3 px-3 py-1 float-right mb-5">
 
     <table class="mt-14 mx-auto clear-both">
       <thead>

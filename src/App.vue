@@ -6,11 +6,14 @@
       <option disabled value="">Please choose a country</option>
       <option>China</option>
       <option>New Zealand</option>
-      <option>Russia</option>
+      <option>Russia</option> <!-- will show error message when selected -->
       <option>United States</option>
     </select>
 
-    <UniversitiesList :country="selectedCountry" :universities="universities" />
+    <div v-if="selectedCountry" class="text-lg border rounded w-1/2 mt-16 p-5 mx-auto bg-green-200">
+      <p v-if="errorMessage">{{ errorMessage }}</p>
+      <UniversitiesList v-else :country="selectedCountry" :universities="universities" />
+    </div>
   </div>
 </template>
 
@@ -25,14 +28,21 @@ export default {
   data: function () {
     return {
       selectedCountry: '',
-      universities: []
+      universities: [],
+      errorMessage: ''
     }
   },
   methods: {
     getUniversitiesData() {
       fetch('http://uni.test/api/universities?country=' + this.selectedCountry)
-        .then(response => response.json())
-        .then(data => this.universities = data)
+        .then(response => {
+          if (response.status == 200) {
+            this.errorMessage = '';
+            response.json().then(data => this.universities = data)
+          } else {
+            response.json().then(data => this.errorMessage = data.message)
+          }
+        })
         .catch(error => {
           console.error('There has been a problem with your fetch operation:', error);
         });
