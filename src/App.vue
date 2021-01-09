@@ -2,7 +2,7 @@
   <div id="app" class="mt-10 mb-40 mx-auto">
     <h1 class="text-5xl">University Domains List</h1>
 
-    <select v-model="selectedCountry" @change="getUniversitiesData" class="mt-10 text-2xl border border-opacity-50 rounded-lg border-red-400 py-1 px-5">
+    <select v-model="selectedCountry" @change="getUniversitiesData()" class="mt-10 text-2xl border border-opacity-50 rounded-lg border-red-400 py-1 px-5">
       <option disabled value="">Please choose a country</option>
       <option>China</option>
       <option>New Zealand</option>
@@ -12,9 +12,16 @@
 
     <Loader v-if="loading" class="mx-auto mt-10"/>
 
-    <div v-if="selectedCountry && !loading" class="text-lg border rounded w-1/2 mt-16 p-5 mx-auto bg-green-200">
-      <p v-if="errorMessage">{{ errorMessage }}</p>
-      <UniversitiesList v-else :country="selectedCountry" :universities="universities" />
+    <div v-else class="w-1/2 mx-auto">
+      <div v-if="selectedCountry" class="mt-14 text-left ">
+        <h3 class="text-xl inline-block mb-4">Universities in {{ selectedCountry }}</h3>
+        <button class="border rounded px-3 py-1 bg-gray-100 ml-2" @click="getUniversitiesData(true)">Force update from source API</button>
+      </div>
+
+      <div v-if="selectedCountry" class="text-lg border rounded p-5 bg-green-200">
+        <p v-if="errorMessage">{{ errorMessage }}</p>
+        <UniversitiesList v-else :country="selectedCountry" :universities="universities" />
+      </div>
     </div>
   </div>
 </template>
@@ -38,10 +45,15 @@ export default {
     }
   },
   methods: {
-    getUniversitiesData() {
+    getUniversitiesData(fromSourceApi = false) {
       this.loading = true;
 
-      fetch('http://uni.test/api/universities?country=' + this.selectedCountry)
+      let uri = 'http://uni.test/api/universities?country=';
+      if (fromSourceApi) {
+        uri = 'http://universities.hipolabs.com/search?country=';
+      }
+
+      fetch(uri + this.selectedCountry)
         .then(response => {
           if (response.status == 200) {
             this.errorMessage = '';
@@ -54,7 +66,8 @@ export default {
         .catch(error => {
           console.error('There has been a problem with your fetch operation:', error);
         });
-    }
+    },
+
   }
 }
 </script>
