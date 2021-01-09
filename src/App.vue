@@ -1,17 +1,32 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>University Domains List</h1>
+
+    <select v-model="selectedCountry">
+      <option disabled value="">Please choose a country</option>
+      <option>China</option>
+      <option>New Zealand</option>
+      <option>Russia</option>
+      <option>United States</option>
+    </select>
+
+    <UniversitiesList :country="selectedCountry" :universities="universities" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import UniversitiesList from './components/UniversitiesList'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    UniversitiesList
+  },
+  data: function () {
+    return {
+      selectedCountry: '',
+      universities: []
+    }
   }
 }
 </script>
