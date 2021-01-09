@@ -1,15 +1,18 @@
 <template>
-  <div>
-    <input v-if="country" v-model="keywords" placeholder="Search a university by name or domain">
+  <div class="text-lg border rounded w-1/2 mt-16 p-5 mx-auto bg-green-200">
+    <input v-if="country" 
+      v-model="keywords" 
+      placeholder="Search by name or domain"
+      class="border rounded w-1/3 px-3 py-1 float-right">
 
-    <table>
+    <table class="mt-14 mx-auto clear-both">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Domains</th>
+          <th class="text-left px-10">Name</th>
+          <th class="text-left">Domains</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="text-left">
         <University 
           v-for="university in universities"
           :key="university.id"

@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
-    <h1>University Domains List</h1>
+  <div id="app" class="mt-10 mb-40 mx-auto">
+    <h1 class="text-5xl">University Domains List</h1>
 
-    <select v-model="selectedCountry" @change="getUniversitiesData">
+    <select v-model="selectedCountry" @change="getUniversitiesData" class="mt-10 text-2xl border border-opacity-50 rounded-lg border-red-400 py-1 px-5">
       <option disabled value="">Please choose a country</option>
       <option>China</option>
       <option>New Zealand</option>
@@ -48,6 +48,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

@@ -1,8 +1,12 @@
 <template>
     <tr>
-      <td>{{ name }}</td>
+      <td class="py-1 px-10">{{ name }}</td>
       <td>
-        <a v-for="(domain, index) in domains" :key="index" :href="'//' + domain">{{ domain }}</a>
+        <a v-for="(domain, index) in domains" 
+          :key="index" :href="'//' + domain"
+          class="block hover:underline"
+          target="_blank"
+          >{{ domain }}</a>
       </td>
     </tr>
 </template>
