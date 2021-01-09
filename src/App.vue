@@ -10,7 +10,9 @@
       <option>United States</option>
     </select>
 
-    <div v-if="selectedCountry" class="text-lg border rounded w-1/2 mt-16 p-5 mx-auto bg-green-200">
+    <Loader v-if="loading" class="mx-auto mt-10"/>
+
+    <div v-if="selectedCountry && !loading" class="text-lg border rounded w-1/2 mt-16 p-5 mx-auto bg-green-200">
       <p v-if="errorMessage">{{ errorMessage }}</p>
       <UniversitiesList v-else :country="selectedCountry" :universities="universities" />
     </div>
@@ -18,22 +20,27 @@
 </template>
 
 <script>
+import Loader from './components/Loader.vue';
 import UniversitiesList from './components/UniversitiesList'
 
 export default {
   name: 'App',
   components: {
-    UniversitiesList
+    UniversitiesList,
+    Loader
   },
   data: function () {
     return {
       selectedCountry: '',
       universities: [],
-      errorMessage: ''
+      errorMessage: '',
+      loading: false,
     }
   },
   methods: {
     getUniversitiesData() {
+      this.loading = true;
+
       fetch('http://uni.test/api/universities?country=' + this.selectedCountry)
         .then(response => {
           if (response.status == 200) {
@@ -42,6 +49,7 @@ export default {
           } else {
             response.json().then(data => this.errorMessage = data.message)
           }
+          this.loading = false;
         })
         .catch(error => {
           console.error('There has been a problem with your fetch operation:', error);
