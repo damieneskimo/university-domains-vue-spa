@@ -1,6 +1,9 @@
 <template>
     <tr>
       <td>{{ name }}</td>
+      <td>
+        <a v-for="(domain, index) in domains" :key="index" :href="'//' + domain">{{ domain }}</a>
+      </td>
     </tr>
 </template>
 

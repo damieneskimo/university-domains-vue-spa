@@ -2,7 +2,7 @@
   <div id="app">
     <h1>University Domains List</h1>
 
-    <select v-model="selectedCountry">
+    <select v-model="selectedCountry" @change="getUniversitiesData">
       <option disabled value="">Please choose a country</option>
       <option>China</option>
       <option>New Zealand</option>
@@ -26,6 +26,16 @@ export default {
     return {
       selectedCountry: '',
       universities: []
+    }
+  },
+  methods: {
+    getUniversitiesData() {
+      fetch('http://uni.test/api/universities?country=' + this.selectedCountry)
+        .then(response => response.json())
+        .then(data => this.universities = data)
+        .catch(error => {
+          console.error('There has been a problem with your fetch operation:', error);
+        });
     }
   }
 }
