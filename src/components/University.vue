@@ -38,9 +38,9 @@ export default {
         .then(response => {
           if (response.status == 200) {
             response.json().then(data => {
-              console.log(data)
-              this.university.name = data.name
-              this.university.domains = data.domains
+              const university = data.data
+              this.university.name = university.name
+              this.university.domains = university.domains
             })
           } else {
             // remove from the list if the university is not found

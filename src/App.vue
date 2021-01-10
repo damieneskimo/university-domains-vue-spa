@@ -57,7 +57,9 @@ export default {
         .then(response => {
           if (response.status == 200) {
             this.errorMessage = '';
-            response.json().then(data => this.universities = data)
+            response.json().then(data => {
+              this.universities = fromSourceApi? data: data.data
+            })
           } else {
             this.universities = [];
             response.json().then(data => this.errorMessage = data.message)
