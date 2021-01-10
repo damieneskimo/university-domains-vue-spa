@@ -17,6 +17,7 @@ export default {
   data: function () {
     return {
       university: Object.assign({}, this.data),
+      abortRequest: new AbortController()
     }
   },
   props: {
@@ -28,11 +29,16 @@ export default {
   updated() {
     this.updateCachedData();
   },
+  beforeDestroy() {
+    // Abort fetch request when component unmount to avoid too many unnecessary fetch requests
+    this.abortRequest.abort();
+  },
   methods: {
     getUpdatedCachedData() {
       let uri = 'http://uni.test/api/universities/' + this.university.id;
 
-      fetch(uri)
+      const signal = this.abortRequest.signal;
+      fetch(uri, {signal})
         .then(response => {
           if (response.status == 200) {
             response.json().then(data => {
@@ -46,14 +52,19 @@ export default {
           }
         })
         .catch(error => {
-          console.error('There has been a problem with your fetch operation:', error);
+          if (error.name === 'AbortError') {
+            console.log('Fetch aborted');
+          } else {
+            console.error('There has been a problem with your fetch operation:', error);
+          }
         });
     },
     updateCachedData() {
+      // do not update if data are retrieved from source api or been removed
       if (Object.prototype.hasOwnProperty.call(this.university, 'id')) {
         const getData = this.getUpdatedCachedData;
-        // const ttl = this.university.ttl * 60 * 1000 + 5000; // add 5 seconds lapse to wait source data updated
-        setTimeout(getData, 1000);
+        const ttl = this.university.ttl * 60 * 1000 + 5000; // add 5 seconds lapse to wait source data updated
+        this.$timeouts.push(setTimeout(getData, ttl));
       }
     }
   }
