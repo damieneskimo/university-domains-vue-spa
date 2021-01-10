@@ -26,9 +26,7 @@ export default {
     this.updateCachedData();
   },
   updated() {
-    if (Object.keys(this.university).length != 0) {
-      this.updateCachedData();
-    }
+    this.updateCachedData();
   },
   methods: {
     getUpdatedCachedData() {
@@ -52,9 +50,11 @@ export default {
         });
     },
     updateCachedData() {
-      const getData = this.getUpdatedCachedData;
-      const ttl = this.university.ttl * 60 * 1000 + 5000; // add 5 seconds lapse to wait source data updated
-      setTimeout(getData, ttl);
+      if (Object.prototype.hasOwnProperty.call(this.university, 'id')) {
+        const getData = this.getUpdatedCachedData;
+        // const ttl = this.university.ttl * 60 * 1000 + 5000; // add 5 seconds lapse to wait source data updated
+        setTimeout(getData, 1000);
+      }
     }
   }
 }
