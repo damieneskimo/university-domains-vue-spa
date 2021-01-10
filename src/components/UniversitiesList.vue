@@ -12,10 +12,7 @@
         </tr>
       </thead>
       <tbody class="text-left">
-        <University 
-          v-for="university in filteredUniversities"
-          :key="university.id"
-          :data="university" />
+        <University v-for="university in filteredUniversities" :key="university.id" :data="university" />
       </tbody>
     </table>
   </div>
@@ -48,8 +45,3 @@
     }
   }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>
