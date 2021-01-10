@@ -15,8 +15,7 @@
         <University 
           v-for="university in filteredUniversities"
           :key="university.id"
-          :name="university.name"
-          :domains="university.domains" />
+          :data="university" />
       </tbody>
     </table>
   </div>

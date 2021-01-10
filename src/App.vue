@@ -12,7 +12,7 @@
 
     <Loader v-if="loading" class="mx-auto mt-10"/>
 
-    <div v-else class="w-1/2 mx-auto">
+    <div v-if="!loading" class="w-1/2 mx-auto">
       <div v-if="selectedCountry" class="mt-14 text-left ">
         <h3 class="text-xl inline-block mb-4">Universities in {{ selectedCountry }}</h3>
         <button class="border rounded px-3 py-1 bg-gray-100 ml-2" @click="getUniversitiesData(true)">Force update from source API</button>
@@ -59,6 +59,7 @@ export default {
             this.errorMessage = '';
             response.json().then(data => this.universities = data)
           } else {
+            this.universities = [];
             response.json().then(data => this.errorMessage = data.message)
           }
           this.loading = false;
