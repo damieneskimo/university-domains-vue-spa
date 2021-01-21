@@ -17,21 +17,17 @@ export default {
   data: function () {
     return {
       university: Object.assign({}, this.data),
-      abortRequest: new AbortController()
     }
   },
   props: {
     data: Object,
   },
   mounted() {
-    this.updateCachedData();
-  },
-  updated() {
-    this.updateCachedData();
-  },
-  beforeDestroy() {
-    // Abort fetch request when component unmount to avoid too many unnecessary fetch requests
-    this.abortRequest.abort();
+    window.Echo.channel('university.domains.' + this.university.id)
+    .listen('.UniversityCacheExpired', (e) => {
+        console.log(e)
+        this.university = e.university
+    })
   },
   methods: {
     getUpdatedCachedData() {
@@ -58,14 +54,6 @@ export default {
             console.error('There has been a problem with your fetch operation:', error);
           }
         });
-    },
-    updateCachedData() {
-      // do not update if data are retrieved from source api or been removed
-      if (Object.prototype.hasOwnProperty.call(this.university, 'id')) {
-        const getData = this.getUpdatedCachedData;
-        const ttl = this.university.ttl * 60 * 1000 + 5000; // add 5 seconds lapse to wait source data updated
-        this.$timeouts.push(setTimeout(getData, ttl));
-      }
     }
   }
 }

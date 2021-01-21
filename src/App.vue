@@ -48,10 +48,6 @@ export default {
     getUniversitiesData(fromSourceApi = false) {
       this.loading = true;
 
-      // clear timeout to avoid unnecessary requents that are sent by getUpdatedCachedData() in University component
-      this.$timeouts.map(timeout => clearTimeout(timeout))
-      this.$timeouts = [];
-
       let uri = 'http://uni.test/api/universities?country=';
       if (fromSourceApi) {
         uri = 'http://universities.hipolabs.com/search?country=';
