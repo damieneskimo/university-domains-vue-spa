@@ -24,17 +24,20 @@ export default {
   },
   mounted() {
     window.Echo.channel('university.domains.' + this.university.id)
-    .listen('.UniversityCacheExpired', (e) => {
+    .listen('.UniversityCacheUpdated', (e) => {
         console.log(e)
         this.university = e.university
+    })
+    .listen('.UniversityCacheDeleted', (e) => {
+        console.log(e)
+        this.university = {}
     })
   },
   methods: {
     getUpdatedCachedData() {
       let uri = 'http://uni.test/api/universities/' + this.university.id;
 
-      const signal = this.abortRequest.signal;
-      fetch(uri, {signal})
+      fetch(uri)
         .then(response => {
           if (response.status == 200) {
             response.json().then(data => {
@@ -48,11 +51,7 @@ export default {
           }
         })
         .catch(error => {
-          if (error.name === 'AbortError') {
-            console.log('Fetch aborted');
-          } else {
-            console.error('There has been a problem with your fetch operation:', error);
-          }
+          console.error('There has been a problem with your fetch operation:', error);
         });
     }
   }
