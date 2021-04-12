@@ -2,7 +2,7 @@
   <div id="app" class="mt-10 mb-40 mx-auto">
     <h1 class="text-5xl">University Domains List</h1>
 
-    <select v-model="selectedCountry" @change="getUniversitiesData()" class="mt-10 text-2xl border border-opacity-50 rounded-lg border-red-400 py-1 px-5">
+    <select v-model="selectedCountry" @change="changeCountryHandler()" class="mt-10 text-2xl border border-opacity-50 rounded-lg border-red-400 py-1 px-5">
       <option disabled value="">Please choose a country</option>
       <option>China</option>
       <option>New Zealand</option>
@@ -38,13 +38,19 @@ export default {
   },
   data: function () {
     return {
-      selectedCountry: '',
+      selectedCountry: this.getUrlQueryString('country'),
       universities: [],
       errorMessage: '',
       loading: false,
     }
   },
   methods: {
+    changeCountryHandler() {
+      this.getUniversitiesData();
+
+      // update url with query string
+      this.updateUrlQueryString('country', this.selectedCountry);
+    },
     getUniversitiesData(fromSourceApi = false) {
       this.loading = true;
 
@@ -70,7 +76,24 @@ export default {
           console.error('There has been a problem with your fetch operation:', error);
         });
     },
+    getUrlQueryString(key) {
+      let searchParams = new URLSearchParams(window.location.search);
+      let queryString = searchParams.get(key);
+      
+      return queryString === null? '' : queryString;
+    },
+    updateUrlQueryString(key, value) {
+      let searchParams = new URLSearchParams(window.location.search);
 
+      if (searchParams.has(key)) {
+        searchParams.set(key, value);
+      } else {
+        searchParams.append(key, value);
+      }
+      let newUrl = window.location.pathname + '?' + searchParams.toString();
+
+      history.replaceState(null, null, newUrl);
+    }
   }
 }
 </script>
