@@ -44,6 +44,11 @@ export default {
       loading: false,
     }
   },
+  mounted: function () {
+    if (this.selectedCountry) {
+      this.getUniversitiesData();
+    }
+  },
   methods: {
     changeCountryHandler() {
       this.getUniversitiesData();
